@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 
 const app = express();
 
-const FRONTEND_ORIGIN = "https://poll-webapp-beta.vercel.app/";
+const FRONTEND_ORIGIN = "https://poll-webapp-beta.vercel.app";
 const PORT = 5000;
 
 app.use(cors({ origin: FRONTEND_ORIGIN }));
