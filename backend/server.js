@@ -5,8 +5,8 @@ import { Server } from "socket.io";
 
 const app = express();
 
-const FRONTEND_ORIGIN = "http://localhost:5173";
-const PORT = 5000;
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const PORT = process.env.PORT || 5000;
 
 app.use(cors({ origin: FRONTEND_ORIGIN }));
 app.get("/health", (_req, res) => res.json({ ok: true }));
