@@ -1,5 +1,5 @@
 import { useState } from "react";
-import socket from "../../socket";
+import socket from "../socket";
 import { Outlet } from "react-router-dom";
 
 export default function Teacher() {
@@ -16,7 +16,10 @@ export default function Teacher() {
     });
     setQuestionText("");
     setOptions([{ text: "", isCorrect: null }]);
+    
   };
+
+  
 
   return (
     <Outlet context={{ questionText, setQuestionText, options, setOptions, createQuestion }} />

@@ -1,24 +1,34 @@
-import React from 'react'
-import { Button } from '@mui/material'
+import { Button } from "@mui/material";
 
-const CustomButton = ({text,onClickHandler}) => {
+const CustomButton = ({ text, onClickHandler, disabled }) => {
   return (
     <Button
       variant="contained"
       onClick={onClickHandler}
+      disabled={disabled}
       sx={{
-        backgroundColor: "transparent",
-        background: "linear-gradient(90deg,#8F64E1,#1D68BD)",
+        background: disabled
+          ? "linear-gradient(90deg,#bbb,#999)"
+          : "linear-gradient(90deg,#8F64E1,#1D68BD)",
         borderRadius: "48px",
         fontWeight: 600,
-        width: "233.93408203125px",
-        height: "57.58056640625px",
-        fontSize:'18px'
+        fontSize: "18px",
+        color: "#fff",
+        width: "234px",
+        height: "58px",
+        textTransform: "none",
+        boxShadow: disabled ? "none" : "0 4px 10px rgba(0,0,0,0.2)",
+        "&:hover": {
+          background: disabled
+            ? "linear-gradient(90deg,#bbb,#999)"
+            : "linear-gradient(90deg,#7A4ED6,#1553A3)",
+          boxShadow: disabled ? "none" : "0 6px 12px rgba(0,0,0,0.25)",
+        },
       }}
     >
       {text}
     </Button>
-  )
-}
+  );
+};
 
-export default CustomButton
+export default CustomButton;

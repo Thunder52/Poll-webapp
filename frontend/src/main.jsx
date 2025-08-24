@@ -3,10 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import Teacher from './component/Teacher/Teacher.jsx';
+import Teacher from './Teacher/Teacher.jsx';
 import Student from './student/Student.jsx';
-import CreateQuestion from './component/Teacher/CreateQuestion.jsx';
-import StudentJoinPage from './student/StudentJoinPage.jsx';
 
 const router=createBrowserRouter([
   {
@@ -19,7 +17,7 @@ const router=createBrowserRouter([
     children:[
       {
         path:'/teacher',
-        element:<CreateQuestion />
+        element:<Teacher />
       }
     ]
   },
@@ -30,12 +28,6 @@ const router=createBrowserRouter([
       {
         path:'/student',
         element:<Student />,
-        // children:[
-        //   {
-        //     path:'/student',
-        //     element:<StudentJoinPage />
-        //   }
-        // ]
       }
     ]
   }

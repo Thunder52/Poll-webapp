@@ -1,26 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import socket from "../socket";
 import StudentJoinPage from "./StudentJoinPage";
 import StudentLoadingPage from "./StudentLoadingPage";
+import QuestionPage from "./QuestionPage";
+import ResultPage from "./ResultPage";
 
-export default function Student() {
-  const [name, setName] = useState("");
+function Student() {
+  const [name, setName] = useState(localStorage.getItem("student_name") || "");
   const [joined, setJoined] = useState(!!name);
   const [question, setQuestion] = useState(null);
   const [selected, setSelected] = useState("");
   const [results, setResults] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const questionNumber = useRef(0);
 
   useEffect(() => {
-    if (joined) socket.emit("join", name);
+    if (joined) {
+      localStorage.setItem("student_name", name);
+      socket.emit("join", name);
+    }
 
     socket.on("newQuestion", (q) => {
       setQuestion(q);
       setSelected("");
       setResults(null);
+      setSubmitted(false);
     });
 
     socket.on("showResults", (data) => {
-      setResults(data.results);
+      setResults(data);
       setQuestion(null);
     });
 
@@ -31,6 +39,12 @@ export default function Student() {
   }, [joined, name]);
 
   const submitAnswer = () => {
+    if (!selected) {
+      alert("Please select an option first!");
+      return;
+    }
+    if (submitted) return;
+    setSubmitted(true);
     socket.emit("submitAnswer", { option: selected });
   };
 
@@ -43,35 +57,21 @@ export default function Student() {
   return (
     <div>
       {question ? (
-        <div>
-          <h3>{question.text}</h3>
-          {question.options.map((opt, index) => (
-            <label key={index} style={{ display: "block", margin: "8px 0" }}>
-              <input
-                type="radio"
-                value={opt.text}
-                checked={selected === opt.text}
-                onChange={() => setSelected(opt.text)}
-              />
-              {opt.text}
-            </label>
-          ))}
-          <button disabled={!selected} onClick={submitAnswer}>
-            Submit
-          </button>
-        </div>
+        <QuestionPage
+          question={question}
+          setSelected={setSelected}
+          submitanswer={submitAnswer}
+          selected={selected}
+          submitted={submitted}
+          QuestionNumber={questionNumber.current}
+        />
       ) : results ? (
-        <div>
-          <h3>Results</h3>
-          {Object.entries(results).map(([opt, count]) => (
-            <p key={opt}>
-              {opt}: {count}
-            </p>
-          ))}
-        </div>
+        <ResultPage questionData={results} role="student" />
       ) : (
         <StudentLoadingPage />
       )}
     </div>
   );
 }
+
+export default Student;
